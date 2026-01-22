@@ -274,38 +274,6 @@ class OrderController extends Controller
         }
     }
 
-    private function itemLine($name, $type, $qty, $total)
-    {
-        $maxWidth = 48; // 80mm paper width
-        $nameWidth = 30;
-        $qtyWidth = 6;
-        $priceWidth = 12;
-
-
-        $itemText = $name . " (" . $type . ")";
-        $itemText = substr($itemText, 0, 28);
-
-        // Wrap text if needed
-        $lines = explode("\n", wordwrap($itemText, 28, "\n", true));
-
-        $output = "";
-
-        foreach ($lines as $index => $line) {
-            if ($index === 0) {
-
-                $output .= str_pad($line, 28);
-                $output .= str_pad("x" . $qty, 6, ' ', STR_PAD_LEFT);
-                $output .= str_pad("Rs." . number_format($total, 0), 12, ' ', STR_PAD_LEFT);
-            } else {
-
-                $output .= $line;
-            }
-            $output .= "\n";
-        }
-
-        return $output;
-    }
-
     public function order_id()
     {
         $order_id = Order::latest('id')->value('order_id');
