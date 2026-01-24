@@ -19,10 +19,7 @@ class DatabaseSeeder extends Seeder
 
         User::factory()
             ->count(1)
-            ->create([
-                'email' => 'admin@broz.com',
-                'password' => Hash::make('broz.1122'),
-            ]);
+            ->create();
 
         $this->call(OrdersTableSeeder::class);
     }
