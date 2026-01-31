@@ -122,8 +122,8 @@ Ensure you have the following installed on your system:
 
 ### Step-by-Step Installation
 
-#### Step 1: Clone the Repository
 ```bash
+#Step 1: Clone the Repository
 git clone https://github.com/yourusername/advance-pos-system.git
 cd advance-pos-system
 #Step 2: Install Backend Dependencies
@@ -144,4 +144,3 @@ npm run dev
 # Step 8: Start the Development Server
 php artisan serve
 ```
-
