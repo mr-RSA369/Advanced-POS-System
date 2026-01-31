@@ -1,6 +1,6 @@
-this is an example readme.md file: # Leave Management API
+# Advance-POS-System
 
-A comprehensive RESTful API for managing employee leave requests with role-based access control and approval workflows.
+A comprehensive and modern Point of Sale (POS) system for restaurants and retail businesses with complete inventory management, order processing, and financial reporting capabilities.
 
 ## 📋 Table of Contents
 
@@ -8,264 +8,152 @@ A comprehensive RESTful API for managing employee leave requests with role-based
 - [Features](#features)
 - [Technology Stack](#technology-stack)
 - [Installation & Setup](#installation--setup)
-- [API Documentation](#api-documentation)
-- [Database Schema](#database-schema)
 - [Architecture Decisions](#architecture-decisions)
+- [Database Schema](#database-schema)
+- [API Documentation](#api-documentation)
+- [Printing Setup](#printing-setup)
 - [Testing](#testing)
 - [Known Limitations](#known-limitations)
+- [Future Enhancements](#future-enhancements)
+- [License](#license)
+- [Contributing](#contributing)
+- [Security](#security)
+- [Support](#support)
 
 ---
 
 ## 🎯 Overview
 
-This Leave Management API is designed to handle employee leave requests with a three-tier approval hierarchy:
-- **General Users** submit leave requests → require HR approval
-- **HR Users** submit leave requests → require Admin approval  
-- **Admin Users** submit leave requests → auto-approved
+The Advance-POS-System is a full-featured restaurant and retail management solution designed to streamline operations from order taking to financial reporting. The system supports multiple order types (Dine-in, Takeaway, Delivery), real-time inventory tracking, thermal printing integration, and comprehensive financial analytics with profit/loss calculations.
 
-The system supports full-day, half-day, and multi-day leave requests with automatic leave balance tracking and validation.
+The system follows a modern architecture with Laravel backend providing RESTful APIs and Vue.js frontend with Inertia.js for a seamless single-page application experience.
 
 ---
 
 ## ✨ Features
 
-### User Management
-- ✅ User registration and authentication (JWT via Laravel Sanctum)
-- ✅ Role-based access control (Admin, HR, General)
-- ✅ Secure password hashing
+### 🍽️ Menu & Inventory Management
+- **Add, Edit, Delete** menu items with categories
+- Real-time inventory tracking
+- Price management and updates
+- Stock level monitoring
+- Category-based organization
 
-### Leave Request Management
-- ✅ Submit leave requests (full-day, half-day, multi-day)
-- ✅ Approve/reject leave requests based on role hierarchy
-- ✅ View leave history with filtering (by status) and pagination
-- ✅ Prevent overlapping approved leave requests
-- ✅ Date range validation
+### 📋 Order Processing
+- **Real-time order creation** with live item display
+- Support for **Dine-in, Takeaway, and Delivery** orders
+- **Kitchen bill printing** (optional)
+- **Save orders** for later processing
+- **Cancel orders** with reason tracking
+- **Close orders** after payment completion
+- Multiple payment method support
+- Order status tracking
 
-### Leave Balance Tracking
-- ✅ Annual leave entitlement (30 days default)
-- ✅ Real-time leave balance calculation
-- ✅ Used days tracking (approved leaves only)
-- ✅ Remaining balance display
-- ✅ Insufficient balance prevention
+### 🧾 Billing System
+- **Dynamic bill generation** with itemized breakdown
+- Apply **Discounts, Service Charges, and Delivery Charges**
+- **Print customer receipts** with thermal printer
+- Tax calculation and breakdown
+- Bill customization options
 
-### Security & Validation
-- ✅ Role-based authorization middleware
-- ✅ Input validation on all endpoints
-- ✅ Business logic validation (overlapping, balance, dates)
-- ✅ Consistent error handling
+### 📊 Sales Management
+- **Daily sales aggregation** (closed orders grouped by day)
+- **PDF report generation** for sales data
+- **Filter sales** by specific days, months, or custom date ranges
+- **Search orders** by item name or customer details
+- View orders by type (Delivery, Dine-in, Takeaway)
+- Sales trend analysis
+
+### 📦 Purchase Management
+- **Add daily purchases** with supplier details
+- **Purchase list** with date-wise organization
+- **PDF report generation** for purchase records
+- **Filter purchases** by specific dates and months
+- **Summary and Detailed purchase reports**
+- Supplier management
+
+### 📈 Dashboard & Analytics
+- **Monthly Sales** (PKR) overview
+- **Monthly Purchases** (PKR) tracking
+- **Real-time Profit/Loss calculation** (Sales - Purchases)
+- **Order type statistics** for current month:
+  - Delivery orders count
+  - Takeaway orders count
+  - Dine-in orders count
+- Visual charts and graphs for business insights
+- Performance metrics
+
+### 📄 Reporting System
+- **Generate PDF reports** for:
+  - Sales reports (daily, monthly, custom)
+  - Purchase reports (daily, monthly, custom)
+  - Summary financial reports
+  - Detailed transaction reports
+- **Export capabilities** to multiple formats
+- **Filtering options** for all report types
+- Scheduled report generation
 
 ---
 
 ## 🛠 Technology Stack
 
-- **Framework:** Laravel 10.x
-- **Authentication:** Laravel Sanctum (Bearer Token)
-- **Database:** MySQL
-- **API Documentation:** OpenAPI 3.0 / Swagger (via L5-Swagger)
-- **PHP Version:** 8.1+
+### Backend
+- **PHP 8.1+** - Server-side programming language
+- **Laravel 10.x** - PHP framework with RESTful APIs
+- **MySQL 8.0+** - Relational database
+- **Laravel Breeze** - Authentication scaffolding
+- **Mike42/ESC-POS** - Thermal printing library
+
+### Frontend
+- **Vue.js 3** - Progressive JavaScript framework
+- **Inertia.js** - Server-side routing for single-page apps
+- **Tailwind CSS** - Utility-first CSS framework
+- **Axios** - HTTP client for API calls
+- **jsPDF** - Client-side PDF generation
+- **Chart.js** - Data visualization
+
+### Development Tools
+- **Composer** - PHP dependency manager
+- **NPM** - JavaScript package manager
+- **Git** - Version control
 
 ---
 
 ## 📦 Installation & Setup
 
 ### Prerequisites
+
+Ensure you have the following installed on your system:
+
 - PHP >= 8.1
 - Composer
-- MySQL >= 5.7
+- Node.js >= 16.x
+- MySQL >= 8.0
+- NPM/Yarn
+- Git
 
-### Installation Steps
+### Step-by-Step Installation
 
+#### Step 1: Clone the Repository
 ```bash
-# 1. Install Dependencies
+git clone https://github.com/yourusername/advance-pos-system.git
+cd advance-pos-system
+#Step 2: Install Backend Dependencies
 composer install
-
-# 2. Environment Setup
+composer install mike42/escpos-php
+composer install barryvdh/laravel-dompdf
+#step 3: Install Frontend Dependencies
+npm install
+# Step 4: Environment Configuration
 cp .env.example .env
+# Update .env with your database and other configurations
+# Step 5: Generate Application Key
 php artisan key:generate
-
-# 3. Configure Database (.env file)
-DB_CONNECTION=mysql
-DB_DATABASE=leave_management
-DB_USERNAME=root
-DB_PASSWORD=
-
-# 4. Create Database
-mysql -u root -p
-CREATE DATABASE leave_management;
-
-# 5. Run Migrations
-php artisan migrate
-
-# 6. Seed Database (Optional)
-php artisan db:seed
-
-# 7. Install Swagger
-composer require "darkaonline/l5-swagger"
-php artisan vendor:publish --provider "L5Swagger\L5SwaggerServiceProvider"
-php artisan l5-swagger:generate
-
-# 8. Start Server
+# Step 6: Run Migrations and Seed Database
+php artisan migrate --seed
+# Step 7: Build Frontend Assets
+npm run dev
+# Step 8: Start the Development Server
 php artisan serve
 ```
 
-**Access:**
-- API: `http://localhost:8000/api`
-- Swagger Docs: `http://localhost:8000/api/documentation`
-
-**Test Users (after seeding):**
-- Admin: admin@example.com / password
-- HR: hr@example.com / password
-- General: john@example.com / password
-
----
-
-## 📚 API Endpoints
-
-**Authentication:**
-- POST `/api/auth/register` - Register
-- POST `/api/auth/login` - Login
-- POST `/api/auth/logout` - Logout
-- GET `/api/auth/me` - Get user
-
-**Leave Requests:**
-- GET `/api/leave-requests` - List all
-- POST `/api/leave-requests` - Create
-- GET `/api/leave-requests/{id}` - Get one
-- POST `/api/leave-requests/{id}/approve` - Approve (HR/Admin)
-- POST `/api/leave-requests/{id}/reject` - Reject (HR/Admin)
-
-**Leave Balance:**
-- GET `/api/leave-balance` - Own balance
-- GET `/api/leave-balance/all` - All users (HR/Admin)
-
-**Full Documentation:** Visit Swagger UI at `http://localhost:8000/api/documentation`
-
----
-
-## 🗄 Database Schema
-
-**users:** id, name, email, password, role (admin/hr/general), annual_leave_entitlement (30)
-
-**leave_requests:** id, user_id, leave_type, start_date, end_date, half_day_period, reason, status, approved_by, rejection_reason, approved_at, days_count
-
----
-
-## 🏗 Key Architecture Decisions
-
-1. **Sanctum for Authentication** - Lightweight, token-based, perfect for APIs
-2. **Role-based Middleware** - Simple enum roles with custom middleware
-3. **Real-time Balance Calculation** - No caching, always accurate
-4. **Form Request Validation** - Clean separation of concerns
-5. **Business Logic in Controller** - Explicit approval hierarchy
-6. **Calendar Day Calculation** - Weekends/holidays excluded per requirements
-
----
-
-## 🧪 Testing
-
-**Complete test suite with 72 tests covering all functionality:**
-
-- **Feature Tests:** 52 tests for API endpoints
-- **Unit Tests:** 20 tests for models and business logic
-
-### Run Tests
-
-```bash
-# Create test database first
-CREATE DATABASE leave_management_test;
-
-# Run all tests
-php artisan test
-
-# Run with coverage
-php artisan test --coverage
-```
-
-**Test Coverage:**
-- ✅ Authentication (registration, login, logout)
-- ✅ Leave requests (create, list, approve, reject)
-- ✅ Leave balance calculations
-- ✅ Role-based authorization
-- ✅ Input validation
-- ✅ Model methods and relationships
-
-See [TESTING.md](TESTING.md) for detailed testing guide.
-
----
-
-## 📄 Documentation
-
-- **[ASSUMPTIONS.md](ASSUMPTIONS.md)** - Comprehensive design decisions and assumptions
-- **[TESTING.md](TESTING.md)** - Complete testing guide and best practices
-- **API Documentation** - Available at `/api/documentation` (Swagger UI)
-
----
-
-## ⚠️ Known Limitations
-
-1. **No weekend/holiday exclusion** - Calendar days only (per requirements)
-2. **No leave proration** - Fixed 30 days for all (per requirements)
-3. **No email notifications** - Not in scope
-4. **No leave cancellation** - One-way workflow
-5. **No document attachments** - Not implemented
-6. **No carry forward** - Annual cycle not defined
-
----
-
-## 📊 Manual Testing with Swagger
-
-Use Swagger UI for interactive API testing:
-1. Open `http://localhost:8000/api/documentation`
-2. Click "Authorize" button
-3. Enter Bearer token from login
-4. Test all endpoints
-
----
-
-## 📝 Code Quality
-
-- PSR-12 Standards
-- RESTful Design
-- SOLID Principles
-- Comprehensive Documentation
-- Consistent Response Structure
-
----
-
-**Built with Laravel**
-
-
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
-
-### Premium Partners
-
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
-
-## Contributing
-
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
-
-## Code of Conduct
-
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
- i need such type of content in my project's readme.md
