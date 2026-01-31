@@ -8,17 +8,6 @@ A comprehensive and modern Point of Sale (POS) system for restaurants and retail
 - [Features](#features)
 - [Technology Stack](#technology-stack)
 - [Installation & Setup](#installation--setup)
-- [Architecture Decisions](#architecture-decisions)
-- [Database Schema](#database-schema)
-- [API Documentation](#api-documentation)
-- [Printing Setup](#printing-setup)
-- [Testing](#testing)
-- [Known Limitations](#known-limitations)
-- [Future Enhancements](#future-enhancements)
-- [License](#license)
-- [Contributing](#contributing)
-- [Security](#security)
-- [Support](#support)
 
 ---
 
@@ -98,10 +87,9 @@ The system follows a modern architecture with Laravel backend providing RESTful 
 ## 🛠 Technology Stack
 
 ### Backend
-- **PHP 8.1+** - Server-side programming language
+- **PHP 8.2+** - Server-side programming language
 - **Laravel 10.x** - PHP framework with RESTful APIs
 - **MySQL 8.0+** - Relational database
-- **Laravel Breeze** - Authentication scaffolding
 - **Mike42/ESC-POS** - Thermal printing library
 
 ### Frontend
@@ -125,7 +113,7 @@ The system follows a modern architecture with Laravel backend providing RESTful 
 
 Ensure you have the following installed on your system:
 
-- PHP >= 8.1
+- PHP >= 8.2
 - Composer
 - Node.js >= 16.x
 - MySQL >= 8.0
