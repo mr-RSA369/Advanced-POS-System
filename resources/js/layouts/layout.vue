@@ -1,10 +1,28 @@
 <script setup>
 import { Link } from "@inertiajs/vue3";
 import { ref, onMounted, onUnmounted } from "vue";
+import axios from "axios";
 import brozLogo from "@/logo/broz logo.png";
 
 const isSidebarOpen = ref(true);
 const isMobile = ref(false);
+
+// Daily Sales Data
+const dailySales = ref({
+    total: 0,
+    order_count: 0,
+    trend: 0,
+    formatted_date: '',
+    comparison: {
+        yesterday: 0,
+        difference: 0,
+        trend_percent: 0
+    }
+});
+
+const dailySalesLoading = ref(false);
+const showDailyDetails = ref(false);
+
 
 const checkScreenSize = () => {
     isMobile.value = window.innerWidth < 1024;
@@ -15,9 +33,23 @@ const checkScreenSize = () => {
     }
 };
 
+// Fetch Daily Sales
+const fetchDailySales = async () => {
+    try {
+        dailySalesLoading.value = true;
+        const response = await axios.get("/api/stats/daily-sales");
+        dailySales.value = response.data;
+    } catch (error) {
+        console.error("Failed to fetch daily sales:", error);
+    } finally {
+        dailySalesLoading.value = false;
+    }
+};
+
 onMounted(() => {
     checkScreenSize();
     window.addEventListener("resize", checkScreenSize);
+    fetchDailySales();
 });
 
 onUnmounted(() => {
@@ -26,6 +58,16 @@ onUnmounted(() => {
 
 const toggleSidebar = () => {
     isSidebarOpen.value = !isSidebarOpen.value;
+};
+
+// Format currency
+const formatCurrency = (value) => {
+    return new Intl.NumberFormat('en-PK', {
+        style: 'currency',
+        currency: 'PKR',
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 0
+    }).format(value).replace('PKR', 'Rs');
 };
 </script>
 
@@ -423,7 +465,109 @@ const toggleSidebar = () => {
                     </div>
                 </div>
 
+
+
                 <div class="flex items-center gap-x-3 lg:gap-x-4">
+
+                    <div class="relative">
+        <button
+            @click="showDailyDetails = !showDailyDetails"
+            class="flex items-center gap-2 px-3 py-1.5 bg-gradient-to-r from-green-50 to-emerald-50 border border-green-200 rounded-lg hover:shadow-md transition-all duration-200 group"
+            :class="{ 'shadow-md ring-2 ring-green-200': showDailyDetails }"
+        >
+            <!-- Loading Spinner -->
+            <div v-if="dailySalesLoading" class="flex items-center">
+                <div class="animate-spin h-4 w-4 border-2 border-green-600 border-t-transparent rounded-full"></div>
+            </div>
+
+            <!-- Sales Icon & Amount -->
+            <template v-else>
+                <div class="relative">
+      <svg class="w-4 h-4 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+        d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" />
+</svg>
+                    <!-- Small indicator dot for orders -->
+                    <span v-if="dailySales.order_count > 0"
+                        class="absolute -top-1 -right-1 w-2 h-2 bg-green-500 rounded-full ring-1 ring-white">
+                    </span>
+                </div>
+
+                <div class="flex items-baseline gap-1">
+                    <span class="text-sm font-semibold text-gray-900">
+                        Rs {{ dailySales.total.toLocaleString() }}
+                    </span>
+                    <!-- Trend indicator -->
+                    <span v-if="dailySales.trend !== 0"
+                        class="text-xs font-medium"
+                        :class="dailySales.trend > 0 ? 'text-green-600' : 'text-red-600'">
+                        {{ dailySales.trend > 0 ? '↑' : '↓' }} {{ Math.abs(dailySales.trend) }}%
+                    </span>
+                </div>
+
+                <!-- Chevron icon -->
+                <svg class="w-3 h-3 text-gray-400 transition-transform duration-200"
+                    :class="{ 'rotate-180': showDailyDetails }"
+                    fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                </svg>
+            </template>
+        </button>
+
+        <!-- Dropdown Details Card -->
+        <div v-if="showDailyDetails"
+            class="absolute right-0 mt-2 w-64 bg-white rounded-xl shadow-xl border border-gray-100 p-4 z-50 animate-fadeIn">
+            <div class="space-y-3">
+                <!-- Header -->
+                <div class="flex items-center justify-between pb-2 border-b border-gray-100">
+                    <span class="text-xs font-medium text-gray-400 uppercase tracking-wider">Today's Sales</span>
+                    <span class="text-xs text-gray-500">{{ dailySales.formatted_date }}</span>
+                </div>
+
+                <!-- Main Stats -->
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <span class="text-xs text-gray-400 block">Total</span>
+                        <span class="text-lg font-bold text-gray-900">Rs {{ dailySales.total.toLocaleString() }}</span>
+                    </div>
+                    <div>
+                        <span class="text-xs text-gray-400 block">Orders</span>
+                        <span class="text-lg font-bold text-gray-900">{{ dailySales.order_count }}</span>
+                    </div>
+                </div>
+
+                <!-- Comparison -->
+                <div class="bg-gray-50 rounded-lg p-3">
+                    <div class="flex justify-between items-center">
+                        <span class="text-xs text-gray-500">vs Yesterday</span>
+                        <span class="text-sm font-medium"
+                            :class="dailySales.comparison.difference >= 0 ? 'text-green-600' : 'text-red-600'">
+                            {{ dailySales.comparison.difference >= 0 ? '+' : '' }}{{ dailySales.comparison.difference.toLocaleString() }}
+                        </span>
+                    </div>
+                    <div class="flex justify-between items-center mt-1">
+                        <span class="text-xs text-gray-500">Yesterday</span>
+                        <span class="text-sm font-medium text-gray-700">Rs {{ dailySales.comparison.yesterday.toLocaleString() }}</span>
+                    </div>
+                </div>
+
+                <!-- Average per order -->
+                <div class="flex justify-between items-center pt-1">
+                    <span class="text-xs text-gray-400">Avg per order</span>
+                    <span class="text-sm font-medium text-gray-800">
+                        Rs {{ dailySales.order_count > 0 ? Math.round(dailySales.total / dailySales.order_count).toLocaleString() : 0 }}
+                    </span>
+                </div>
+
+                <!-- Quick link to sales page -->
+                <Link :href="route('sales')"
+                    class="block text-center text-xs text-green-600 hover:text-green-700 font-medium pt-2 border-t border-gray-100">
+                    View all sales →
+                </Link>
+            </div>
+        </div>
+    </div>
+
                     <!-- User Info -->
                     <div
                         v-if="$page.props.auth.user"
@@ -496,11 +640,11 @@ const toggleSidebar = () => {
 
             <!-- Page Content -->
             <main
-                class="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8 transition-all duration-300"
+                class="flex-1 overflow-y-auto p-2 sm:p-2 lg:p-4 transition-all duration-300"
                 :class="[isSidebarOpen && !isMobile ? 'lg:ml-0' : 'lg:ml-0']"
             >
                 <div
-                    class="max-w-full mx-auto bg-white rounded-xl lg:rounded-2xl shadow-sm border border-gray-200/50 p-4 sm:p-5 lg:p-6 transition-all duration-300"
+                    class="max-w-full mx-auto bg-white rounded-xl lg:rounded-2xl shadow-sm border border-gray-200/50 p-2 sm:p-2 lg:py-4 lg:px-6 transition-all duration-300"
                 >
                     <slot />
                 </div>
@@ -512,6 +656,21 @@ const toggleSidebar = () => {
 <style scoped>
 nav::-webkit-scrollbar {
     width: 4px;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.animate-fadeIn {
+    animation: fadeIn 0.2s ease-out;
 }
 
 nav::-webkit-scrollbar-track {

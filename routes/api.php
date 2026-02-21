@@ -52,6 +52,10 @@ Route::prefix('stats')->group(function () {
     Route::get('/monthly-sales', [DashboardStatsController::class, 'monthlySales']);
     Route::get('/monthly-purchases', [DashboardStatsController::class, 'monthlyPurchases']);
     Route::get('/monthly-orders', [DashboardStatsController::class, 'monthlyOrders']);
+
+    Route::get('/weekly-sales', [DashboardStatsController::class, 'weeklySales']);
+
+    Route::get('/daily-sales', [DashboardStatsController::class, 'dailySales']);
 });
 
 Route::post('/orders/{order}/bill', [OrderController::class, 'storeBill']);

@@ -355,7 +355,7 @@ onMounted(() => {
         <!-- Custom Alerts Component -->
         <CustomAlert />
         <!-- Header Section -->
-        <div class="bg-white border-b shadow-sm sticky top-0 z-10">
+        <div class="bg-white border-b shadow-sm">
             <div class="container mx-auto px-4 py-4">
                 <div
                     class="flex flex-col md:flex-row md:items-center justify-between gap-4"

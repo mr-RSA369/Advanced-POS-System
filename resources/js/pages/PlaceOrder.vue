@@ -264,7 +264,7 @@ watch(orderType, generateOrderId);
             @skip="handleSkipPrinting"
         />
         <!-- ================= HEADER ================= -->
-        <div class="bg-white border-b shadow-sm sticky top-0 z-10">
+        <div class="bg-white border-b shadow-sm sticky">
             <div class="container mx-auto px-4 py-3">
                 <div
                     class="flex flex-col md:flex-row md:items-center justify-between gap-4"
